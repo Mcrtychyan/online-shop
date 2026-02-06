@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Удалить товар{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Подтверждение удаления</h3>
+                </div>
+                <div class="card-body text-center">
+                    <h4>Вы уверены?</h4>
+                    <p class="lead text-danger">Товар "<strong>{{ object.name }}</strong>" будет удален безвозвратно!</p>
+
+                    <div class="mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Категория:</strong> {{ object.category.name }}</p>
+                                <p><strong>Цена:</strong> {{ object.price }} ₽</p>
+                                <p><strong>На складе:</strong> {{ object.stock }} шт.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>URL:</strong> /products/{{ object.slug }}/</p>
+                                <p><strong>Статус:</strong>
+                                    {% if object.is_active %}Активен{% else %}Неактивен{% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fas fa-trash"></i> Да, удалить
+                        </button>
+                    </form>
+
+                    <a href="{% url 'product_list' %}" class="btn btn-secondary btn-lg ms-2">
+                        <i class="fas fa-times"></i> Отмена
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
