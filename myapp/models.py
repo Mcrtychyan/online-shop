@@ -69,4 +69,5 @@ class Products(models.Model):
         return self.name
 
 
-
+class Product:
+    pass

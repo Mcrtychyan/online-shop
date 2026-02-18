@@ -1,0 +1,39 @@
+    {% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Корзина</h2>
+        {% if cart.cart %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Цена</th>
+                        <th>Кол-во</th>
+                        <th>Сумма</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p_id, item in cart.cart.items %}
+                        <tr>
+                            <td>ID: {{ p_id }}</td>  <!-- позже замените на название товара -->
+                            <td>{{ item.price|floatformat:0 }} ₽</td>
+                            <td>{{ item.quantity }}</td>
+                            <!-- ✅ ИСПРАВЛЕНО: без фильтра mul -->
+                            <td><strong>{{ item.price|floatformat:0 }} × {{ item.quantity }} ₽</strong></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="alert alert-success">
+                <h4>Итого: {{ cart.get_total_price|floatformat:0 }} ₽</h4>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <h4>Корзина пуста</h4>
+                <a href="{% url 'product_list' %}" class="btn btn-primary">К товарам</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
