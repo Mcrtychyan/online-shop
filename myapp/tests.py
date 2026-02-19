@@ -4,7 +4,6 @@ from .models import Category, Products
 
 class SimpleModelTests(TestCase):
     def test_category_creation(self):
-        """Простая проверка создания категории"""
         cat = Category(name='Одежда', slug='clothes')
         cat.save()
 
@@ -12,11 +11,8 @@ class SimpleModelTests(TestCase):
         self.assertEqual(cat.name, 'Одежда')
 
     def test_product_creation(self):
-        """Простая проверка создания товара"""
-        # Создаем категорию
         cat = Category.objects.create(name='Книги', slug='books')
 
-        # Создаем товар
         product = Products.objects.create(
             name='Python для начинающих',
             category_id=cat,
@@ -30,7 +26,6 @@ class SimpleModelTests(TestCase):
         self.assertEqual(product.price, 1500.00)
 
     def test_product_defaults(self):
-        """Проверяем значения по умолчанию"""
         cat = Category.objects.create(name='Тест', slug='test')
         product = Products.objects.create(
             name='Тестовый товар',
@@ -39,6 +34,5 @@ class SimpleModelTests(TestCase):
             price=100
         )
 
-        # Проверяем значения по умолчанию
         self.assertEqual(product.stock, 0)  # по умолчанию 0
         self.assertTrue(product.is_active)  # по умолчанию True

@@ -43,9 +43,7 @@
                                 <p class="text-success fs-4 fw-bold">{{ product.price }} ₽</p>
                                 <small class="text-muted">В наличии: {{ product.stock }} шт.</small>
                             </div>
-                            <!-- ✅ НОВЫЙ БЛОК: КНОПКА "В КОРЗИНУ" -->
                             <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
-                                <!-- Кнопка "В корзину" -->
                                 <form method="post" action="{% url 'cart:cart_add' product.pk %}" class="add-to-cart-form d-inline me-2">
                                     {% csrf_token %}
                                     <div class="input-group input-group-sm" style="width: 120px;">
@@ -56,8 +54,6 @@
                                         </button>
                                     </div>
                                 </form>
-
-                                <!-- Админские кнопки -->
                                 <div>
                                     <a href="{% url 'product_edit' product.pk %}" class="btn btn-sm btn-outline-primary" title="Редактировать">
                                         <i class="fas fa-edit"></i>

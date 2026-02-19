@@ -19,7 +19,6 @@
                             <td>ID: {{ p_id }}</td>  <!-- позже замените на название товара -->
                             <td>{{ item.price|floatformat:0 }} ₽</td>
                             <td>{{ item.quantity }}</td>
-                            <!-- ✅ ИСПРАВЛЕНО: без фильтра mul -->
                             <td><strong>{{ item.price|floatformat:0 }} × {{ item.quantity }} ₽</strong></td>
                         </tr>
                     {% endfor %}

@@ -26,6 +26,14 @@
                             {{ form.category_id.label_tag }}
                             {{ form.category_id }}
                             {% if form.category_id.errors %}{{ form.category_id.errors }}{% endif %}
+
+                            <!-- ✅ ПОКАЗАТЕЛЬ НАЗВАНИЯ КАТЕГОРИИ -->
+                            {% if form.instance.category %}
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-tag text-info"></i>
+                                    Выбрана категория: <strong>{{ form.instance.category.name }}</strong>
+                                </small>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -71,8 +79,12 @@
                 </div>
 
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-success">Сохранить</button>
-                    <a href="{% url 'product_list' %}" class="btn btn-secondary">Отмена</a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> Сохранить
+                    </button>
+                    <a href="{% url 'product_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Отмена
+                    </a>
                 </div>
             </form>
         </div>

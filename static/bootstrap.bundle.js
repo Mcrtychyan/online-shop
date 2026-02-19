@@ -9,16 +9,6 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.bootstrap = factory());
 })(this, (function () { 'use strict';
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap dom/data.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-  /**
-   * Constants
-   */
 
   const elementMap = new Map();
   const Data = {
@@ -28,10 +18,7 @@
       }
       const instanceMap = elementMap.get(element);
 
-      // make it clear we only want one instance per element
-      // can be removed later when multiple key/instances are fine to be used
       if (!instanceMap.has(key) && instanceMap.size !== 0) {
-        // eslint-disable-next-line no-console
         console.error(`Bootstrap doesn't allow more than one instance per element. Bound instance: ${Array.from(instanceMap.keys())[0]}.`);
         return;
       }
@@ -57,13 +44,6 @@
     }
   };
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap util/index.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
   const MAX_UID = 1000000;
   const MILLISECONDS_MULTIPLIER = 1000;
   const TRANSITION_END = 'transitionend';
@@ -81,17 +61,12 @@
     return selector;
   };
 
-  // Shout-out Angus Croll (https://goo.gl/pxwQGp)
   const toType = object => {
     if (object === null || object === undefined) {
       return `${object}`;
     }
     return Object.prototype.toString.call(object).match(/\s([a-z]+)/i)[1].toLowerCase();
   };
-
-  /**
-   * Public Util API
-   */
 
   const getUID = prefix => {
     do {
@@ -104,7 +79,6 @@
       return 0;
     }
 
-    // Get transition-duration of the element
     let {
       transitionDuration,
       transitionDelay
@@ -112,12 +86,10 @@
     const floatTransitionDuration = Number.parseFloat(transitionDuration);
     const floatTransitionDelay = Number.parseFloat(transitionDelay);
 
-    // Return 0 if element or transition duration is not found
     if (!floatTransitionDuration && !floatTransitionDelay) {
       return 0;
     }
 
-    // If multiple durations are defined, take the first
     transitionDuration = transitionDuration.split(',')[0];
     transitionDelay = transitionDelay.split(',')[0];
     return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
@@ -135,7 +107,6 @@
     return typeof object.nodeType !== 'undefined';
   };
   const getElement = object => {
-    // it's a jQuery object or a node element
     if (isElement$1(object)) {
       return object.jquery ? object[0] : object;
     }
@@ -149,7 +120,6 @@
       return false;
     }
     const elementIsVisible = getComputedStyle(element).getPropertyValue('visibility') === 'visible';
-    // Handle `details` element as its content may falsie appear visible when it is closed
     const closedDetails = element.closest('details:not([open])');
     if (!closedDetails) {
       return elementIsVisible;
@@ -182,7 +152,6 @@
       return null;
     }
 
-    // Can find the shadow root otherwise it'll return the document
     if (typeof element.getRootNode === 'function') {
       const root = element.getRootNode();
       return root instanceof ShadowRoot ? root : null;
@@ -191,7 +160,6 @@
       return element;
     }
 
-    // when we don't find a shadow root
     if (!element.parentNode) {
       return null;
     }
@@ -219,7 +187,6 @@
   const DOMContentLoadedCallbacks = [];
   const onDOMContentLoaded = callback => {
     if (document.readyState === 'loading') {
-      // add listener on the first call when the document is in loading state
       if (!DOMContentLoadedCallbacks.length) {
         document.addEventListener('DOMContentLoaded', () => {
           for (const callback of DOMContentLoadedCallbacks) {
@@ -291,8 +258,6 @@
     const listLength = list.length;
     let index = list.indexOf(activeElement);
 
-    // if the element does not exist in the list return an element
-    // depending on the direction and if cycle is allowed
     if (index === -1) {
       return !shouldGetNext && isCycleAllowed ? list[listLength - 1] : list[0];
     }
@@ -303,17 +268,6 @@
     return list[Math.max(0, Math.min(index, listLength - 1))];
   };
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap dom/event-handler.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-
-  /**
-   * Constants
-   */
 
   const namespaceRegex = /[^.]*(?=\..*)\.|.*/;
   const stripNameRegex = /\..*/;
@@ -325,10 +279,6 @@
     mouseleave: 'mouseout'
   };
   const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
-
-  /**
-   * Private methods
-   */
 
   function makeEventUid(element, uid) {
     return uid && `${uid}::${uidEvent++}` || element.uidEvent || uidEvent++;
@@ -390,8 +340,6 @@
     }
     let [isDelegated, callable, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction);
 
-    // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
-    // this prevents the handler from being dispatched the same way as mouseover or mouseout does
     if (originalTypeEvent in customEvents) {
       const wrapFunction = fn => {
         return function (event) {
@@ -435,7 +383,6 @@
     }
   }
   function getTypeEvent(event) {
-    // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
     event = event.replace(stripNameRegex, '');
     return customEvents[event] || event;
   }
@@ -525,13 +472,6 @@
     return obj;
   }
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap dom/manipulator.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
   function normalizeData(value) {
     if (value === 'true') {
       return true;
@@ -582,20 +522,8 @@
     }
   };
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap util/config.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-
-  /**
-   * Class definition
-   */
 
   class Config {
-    // Getters
     static get Default() {
       return {};
     }
@@ -615,7 +543,7 @@
       return config;
     }
     _mergeConfigObj(config, element) {
-      const jsonConfig = isElement$1(element) ? Manipulator.getDataAttribute(element, 'config') : {}; // try to parse
+      const jsonConfig = isElement$1(element) ? Manipulator.getDataAttribute(element, 'config') : {};
 
       return {
         ...this.constructor.Default,
@@ -635,23 +563,7 @@
     }
   }
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap base-component.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-
-  /**
-   * Constants
-   */
-
   const VERSION = '5.3.3';
-
-  /**
-   * Class definition
-   */
 
   class BaseComponent extends Config {
     constructor(element, config) {
@@ -665,7 +577,6 @@
       Data.set(this._element, this.constructor.DATA_KEY, this);
     }
 
-    // Public
     dispose() {
       Data.remove(this._element, this.constructor.DATA_KEY);
       EventHandler.off(this._element, this.constructor.EVENT_KEY);
@@ -683,7 +594,6 @@
       return config;
     }
 
-    // Static
     static getInstance(element) {
       return Data.get(getElement(element), this.DATA_KEY);
     }
@@ -704,27 +614,15 @@
     }
   }
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap dom/selector-engine.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
   const getSelector = element => {
     let selector = element.getAttribute('data-bs-target');
     if (!selector || selector === '#') {
       let hrefAttribute = element.getAttribute('href');
 
-      // The only valid content that could double as a selector are IDs or classes,
-      // so everything starting with `#` or `.`. If a "real" URL is used as the selector,
-      // `document.querySelector` will rightfully complain it is invalid.
-      // See https://github.com/twbs/bootstrap/issues/32273
       if (!hrefAttribute || !hrefAttribute.includes('#') && !hrefAttribute.startsWith('.')) {
         return null;
       }
 
-      // Just in case some CMS puts out a full URL with the anchor appended
       if (hrefAttribute.includes('#') && !hrefAttribute.startsWith('#')) {
         hrefAttribute = `#${hrefAttribute.split('#')[1]}`;
       }
@@ -793,12 +691,6 @@
     }
   };
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap util/component-functions.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
 
   const enableDismissTrigger = (component, method = 'hide') => {
     const clickEvent = `click.dismiss${component.EVENT_KEY}`;
@@ -813,22 +705,9 @@
       const target = SelectorEngine.getElementFromSelector(this) || this.closest(`.${name}`);
       const instance = component.getOrCreateInstance(target);
 
-      // Method argument is left, for Alert and only, as it doesn't implement the 'hide' method
       instance[method]();
     });
   };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap alert.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-
-  /**
-   * Constants
-   */
 
   const NAME$f = 'alert';
   const DATA_KEY$a = 'bs.alert';
@@ -838,9 +717,6 @@
   const CLASS_NAME_FADE$5 = 'fade';
   const CLASS_NAME_SHOW$8 = 'show';
 
-  /**
-   * Class definition
-   */
 
   class Alert extends BaseComponent {
     // Getters
@@ -848,7 +724,6 @@
       return NAME$f;
     }
 
-    // Public
     close() {
       const closeEvent = EventHandler.trigger(this._element, EVENT_CLOSE);
       if (closeEvent.defaultPrevented) {
@@ -859,14 +734,12 @@
       this._queueCallback(() => this._destroyElement(), this._element, isAnimated);
     }
 
-    // Private
     _destroyElement() {
       this._element.remove();
       EventHandler.trigger(this._element, EVENT_CLOSED);
       this.dispose();
     }
 
-    // Static
     static jQueryInterface(config) {
       return this.each(function () {
         const data = Alert.getOrCreateInstance(this);
@@ -881,29 +754,10 @@
     }
   }
 
-  /**
-   * Data API implementation
-   */
 
   enableDismissTrigger(Alert, 'close');
 
-  /**
-   * jQuery
-   */
-
   defineJQueryPlugin(Alert);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap button.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-
-  /**
-   * Constants
-   */
 
   const NAME$e = 'button';
   const DATA_KEY$9 = 'bs.button';
@@ -913,23 +767,16 @@
   const SELECTOR_DATA_TOGGLE$5 = '[data-bs-toggle="button"]';
   const EVENT_CLICK_DATA_API$6 = `click${EVENT_KEY$a}${DATA_API_KEY$6}`;
 
-  /**
-   * Class definition
-   */
-
   class Button extends BaseComponent {
-    // Getters
     static get NAME() {
       return NAME$e;
     }
 
-    // Public
     toggle() {
       // Toggle class and sync the `aria-pressed` attribute with the return value of the `.toggle()` method
       this._element.setAttribute('aria-pressed', this._element.classList.toggle(CLASS_NAME_ACTIVE$3));
     }
 
-    // Static
     static jQueryInterface(config) {
       return this.each(function () {
         const data = Button.getOrCreateInstance(this);
@@ -940,9 +787,6 @@
     }
   }
 
-  /**
-   * Data API implementation
-   */
 
   EventHandler.on(document, EVENT_CLICK_DATA_API$6, SELECTOR_DATA_TOGGLE$5, event => {
     event.preventDefault();
@@ -951,23 +795,7 @@
     data.toggle();
   });
 
-  /**
-   * jQuery
-   */
-
   defineJQueryPlugin(Button);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap util/swipe.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-
-  /**
-   * Constants
-   */
 
   const NAME$d = 'swipe';
   const EVENT_KEY$9 = '.bs.swipe';
@@ -991,9 +819,6 @@
     rightCallback: '(function|null)'
   };
 
-  /**
-   * Class definition
-   */
 
   class Swipe extends Config {
     constructor(element, config) {
@@ -1008,7 +833,6 @@
       this._initEvents();
     }
 
-    // Getters
     static get Default() {
       return Default$c;
     }
@@ -1019,12 +843,10 @@
       return NAME$d;
     }
 
-    // Public
     dispose() {
       EventHandler.off(this._element, EVENT_KEY$9);
     }
 
-    // Private
     _start(event) {
       if (!this._supportPointerEvents) {
         this._deltaX = event.touches[0].clientX;
@@ -1077,17 +899,6 @@
     }
   }
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap carousel.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-
-  /**
-   * Constants
-   */
 
   const NAME$c = 'carousel';
   const DATA_KEY$8 = 'bs.carousel';
@@ -1145,9 +956,6 @@
     wrap: 'boolean'
   };
 
-  /**
-   * Class definition
-   */
 
   class Carousel extends BaseComponent {
     constructor(element, config) {
@@ -1164,7 +972,6 @@
       }
     }
 
-    // Getters
     static get Default() {
       return Default$b;
     }
@@ -1175,14 +982,12 @@
       return NAME$c;
     }
 
-    // Public
     next() {
       this._slide(ORDER_NEXT);
     }
     nextWhenVisible() {
       // FIXME TODO use `document.visibilityState`
-      // Don't call next when the page isn't visible
-      // or the carousel or its parent isn't visible
+
       if (!document.hidden && isVisible(this._element)) {
         this.next();
       }
@@ -1234,7 +1039,6 @@
       super.dispose();
     }
 
-    // Private
     _configAfterMerge(config) {
       config.defaultInterval = config.interval;
       return config;
@@ -1259,14 +1063,6 @@
         if (this._config.pause !== 'hover') {
           return;
         }
-
-        // If it's a touch-enabled device, mouseenter/leave are fired as
-        // part of the mouse compatibility events on first tap - the carousel
-        // would stop cycling until user tapped out of it;
-        // here, we listen for touchend, explicitly pause the carousel
-        // (as if it's the second time we tap on it, mouseenter compat event
-        // is NOT fired) and after a timeout (to allow for mouse compatibility
-        // events to fire) we explicitly restart cycling
 
         this.pause();
         if (this.touchTimeout) {
@@ -1339,7 +1135,6 @@
         return;
       }
       if (!activeElement || !nextElement) {
-        // Some weirdness is happening, so we bail
         // TODO: change tests that use empty divs to avoid this check
         return;
       }
