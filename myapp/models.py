@@ -19,8 +19,8 @@ class Category(models.Model):
         verbose_name = "категория"
         verbose_name_plural = "категории"
 
-        def __str__(self):
-            return self.name
+    def __str__(self):
+        return self.name
 
 class Products(models.Model):
     name = models.CharField(max_length=200,verbose_name='Название товара',help_text='Максимум 200 символов')

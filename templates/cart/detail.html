@@ -1,6 +1,14 @@
-    {% extends 'base.html' %}
+{% extends 'base.html' %}
+
 {% block content %}
 <div class="row">
+    <!-- ✅ СТРЕЛКА НАЗАД -->
+    <div class="col-12 mb-3">
+        <a href="{% url 'product_list' %}" class="btn btn-outline-secondary mb-3">
+            <i class="fas fa-arrow-left me-2"></i>Назад к товарам
+        </a>
+    </div>
+
     <div class="col-12">
         <h2>Корзина</h2>
         {% if cart.cart %}
@@ -16,7 +24,7 @@
                 <tbody>
                     {% for p_id, item in cart.cart.items %}
                         <tr>
-                            <td>ID: {{ p_id }}</td>  <!-- позже замените на название товара -->
+                            <td>ID: {{ p_id }}</td>
                             <td>{{ item.price|floatformat:0 }} ₽</td>
                             <td>{{ item.quantity }}</td>
                             <td><strong>{{ item.price|floatformat:0 }} × {{ item.quantity }} ₽</strong></td>

@@ -4,6 +4,31 @@
 {% block title %}Товары{% endblock %}
 
 {% block content %}
+<div class="bg-primary text-white p-3 mb-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h2 class="mb-0">🛒 Интернет-магазин</h2>
+            </div>
+            <div class="d-flex gap-2 align-items-center">
+                <a href="{% url 'cart:cart_detail' %}" class="btn btn-outline-light position-relative">
+                    <i class="fas fa-shopping-cart"></i> Корзина
+                    {% if cart_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ cart_count }}
+                        </span>
+                    {% endif %}
+                </a>
+                <div class="btn-group btn-group-sm" role="group">
+                    <a href="{% url 'category_list' %}" class="btn btn-outline-light">📂 Категории</a>
+                    <a href="{% url 'product_list' %}" class="btn btn-light active">📦 Товары</a>
+                    <a href="{% url 'product_add' %}" class="btn btn-success">➕ Товар</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-3">
@@ -21,13 +46,6 @@
         </div>
 
         <div class="col-md-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>
-                    {% if category %}{{ category.name }}{% else %}Все товары{% endif %}
-                </h2>
-                <a href="{% url 'product_add' %}" class="btn btn-primary">Добавить товар</a>
-            </div>
-
             {% if products %}
                 <div class="row">
                     {% for product in products %}
