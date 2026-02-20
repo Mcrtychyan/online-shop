@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from .models import Category, Products
 from .forms import CategoryForm, ProductForm
 
+
 def category_list(request):
     context = {
         'categories': Category.objects.all()
@@ -79,6 +80,23 @@ class ProductDetailView(DetailView):
     model = Products
     template_name = 'myapp/product_detail.html'
     context_object_name = 'product'
+
+    def get_queryset(self):
+        return Products.objects.filter(is_active=True)
+
+
+class ProductsDetailView(DetailView):
+    model = Products
+    template_name = 'myapp/product_detail.html'
+    context_object_name = 'product'
+
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get('slug')
+        if queryset is None:
+            queryset = self.get_queryset()
+        if slug:
+            return get_object_or_404(queryset, slug=slug, is_active=True)
+        return super().get_object(queryset)
 
     def get_queryset(self):
         return Products.objects.filter(is_active=True)
